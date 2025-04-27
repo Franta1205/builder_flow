@@ -1,4 +1,5 @@
 class Client < ApplicationRecord
-  belongs_to :company
   has_many :projects
+  has_many :client_memberships
+  has_many :users, through: :client_memberships
 end

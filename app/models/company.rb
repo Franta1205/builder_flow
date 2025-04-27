@@ -1,5 +1,5 @@
 class Company < ApplicationRecord
-  has_many :users, dependent: :destroy
-  has_many :clients, dependent: :destroy
+  has_many :company_memberships
+  has_many :users, through: :company_memberships
   has_many :projects, dependent: :destroy
 end

@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_26_145950) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_27_125430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "client_memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "client_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_memberships_on_client_id"
+    t.index ["user_id", "client_id"], name: "index_client_memberships_on_user_id_and_client_id", unique: true
+    t.index ["user_id"], name: "index_client_memberships_on_user_id"
+  end
 
   create_table "clients", force: :cascade do |t|
     t.bigint "company_id", null: false
@@ -47,6 +58,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_26_145950) do
     t.index ["tax_id"], name: "index_companies_on_tax_id", unique: true
   end
 
+  create_table "company_memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "company_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_memberships_on_company_id"
+    t.index ["user_id", "company_id"], name: "index_company_memberships_on_user_id_and_company_id", unique: true
+    t.index ["user_id"], name: "index_company_memberships_on_user_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.bigint "client_id", null: false
@@ -71,7 +93,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_26_145950) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.bigint "company_id", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -81,7 +102,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_26_145950) do
     t.string "last_name", null: false
     t.string "position"
     t.string "phone"
-    t.integer "role", default: 1
     t.boolean "active", default: true
     t.string "confirmation_token"
     t.datetime "confirmed_at"
@@ -89,14 +109,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_26_145950) do
     t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_users_on_company_id"
-    t.index ["email", "company_id"], name: "index_users_on_email_and_company_id", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "client_memberships", "clients"
+  add_foreign_key "client_memberships", "users"
   add_foreign_key "clients", "companies"
+  add_foreign_key "company_memberships", "companies"
+  add_foreign_key "company_memberships", "users"
   add_foreign_key "projects", "clients"
   add_foreign_key "projects", "companies"
   add_foreign_key "projects", "users", column: "project_manager_id"
-  add_foreign_key "users", "companies"
 end

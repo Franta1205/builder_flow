@@ -3,7 +3,6 @@
 class DeviseCreateUsers < ActiveRecord::Migration[7.1]
   def change
     create_table :users do |t|
-      t.references :company, null: false, foreign_key: true
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
 
@@ -25,7 +24,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :last_name, null: false
       t.string :position
       t.string :phone
-      t.integer :role, default: 1
       t.boolean :active, default: true
 
       ## Confirmable
@@ -43,7 +41,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.timestamps null: false
     end
 
-    add_index :users, [:email, :company_id], unique: true
+    add_index :users, :email, unique: true
     add_index :users, :reset_password_token, unique: true
   end
 end
