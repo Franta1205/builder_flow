@@ -13,6 +13,19 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div id="vue-app">
+      <% if current_user %>
+        <%= vue_component 'SidebarNavigation' %>
+        <div class="lg:pl-72">
+      <% else %>
+        <div>
+      <% end %>
+        <main class="py-10">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <%= yield %>
+          </div>
+        </main>
+      </div>
+    </div>
   </body>
 </html>
