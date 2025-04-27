@@ -18,18 +18,26 @@ end
 user_admin = User.find_by(email: "admin@email.com")
 if user_admin.nil?
   User.create!(
-    company_id: admin_company.id,
     email: "admin@email.com",
     password: "password123",
     first_name: "Admin",
     last_name: "User",
     position: "Administrator",
     phone: "444555666",
-    role: 1,
     active: true,
     confirmed_at: Time.now
   )
   puts "admin user created"
 else
   puts "admin user already exists"
+end
+
+c_membership = CompanyMembership.find_by(user: user_admin, company: admin_company)
+
+if c_membership.nil?
+  CompanyMembership.create!(
+    user: user_admin,
+    company: admin_company,
+    role: 0
+  )
 end

@@ -9,6 +9,6 @@ class AdminController < ApplicationController
   end
 
   def admin_access?
-    current_user.role != :client
+    current_user.company_memberships.any?
   end
 end

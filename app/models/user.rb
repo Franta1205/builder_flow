@@ -10,6 +10,6 @@ class User < ApplicationRecord
   has_many :company_memberships
   has_many :companies, through: :company_memberships
 
-  validates :email, presence: true, uniqueness: { scope: :company_id }
+  validates :email, presence: true, uniqueness: true
   validates :first_name, :last_name, presence: true
 end
